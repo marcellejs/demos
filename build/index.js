@@ -45,6 +45,9 @@ function buildAll() {
 }
 
 function copyFiles() {
+  if (!fs.existsSync('dist')) {
+    fs.mkdirSync('dist');
+  }
   return pkg.workspaces.map((path) => {
     fse
       .copy(join(path, 'dist'), join('dist', path))
@@ -70,7 +73,7 @@ function writeIndexPage() {
       console.err(err);
       process.exit(1);
     }
-    fs.writeFileSync('dist/index.html', str);
+    fs.writeFileSync(join('dist', 'index.html'), str);
   });
 }
 
