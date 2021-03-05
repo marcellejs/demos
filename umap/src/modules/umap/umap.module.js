@@ -1,5 +1,5 @@
 import { Module, Stream } from '@marcellejs/core';
-import u from 'umap-js';
+import { UMAP } from 'umap-js';
 import Component from './umap.svelte';
 
 export class Umap extends Module {
@@ -7,9 +7,8 @@ export class Umap extends Module {
     super();
     this.$embedding = new Stream([], true);
     this.$labels = new Stream([], true);
-    this.name = 'umap';
+    this.title = 'umap';
     this.supervised = supervised;
-    this.description = 'TODO: Umap description';
     this.dataset = dataset;
     this.start();
   }
@@ -21,7 +20,7 @@ export class Umap extends Module {
     const umapData = instances.data.reduce((d, x) => d.concat([x.features[0]]), []);
     const labels = instances.data.map((x) => x.label);
     this.$labels.set(labels);
-    const umap = new u.UMAP({ nComponents: 2 });
+    const umap = new UMAP({ nComponents: 2 });
     if (this.supervised) {
       umap.setSupervisedProjection(labels);
     }

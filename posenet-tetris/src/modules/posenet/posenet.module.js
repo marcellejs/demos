@@ -25,11 +25,10 @@ const partOrder = [
 export class Posenet extends Module {
   constructor({ joints = partOrder } = {}) {
     super();
-    this.name = 'posenet';
-    this.description = 'TODO: Posenet description';
+    this.tile = 'posenet';
     this.webcam = webcam({ width: 400, height: 300 });
     this.toggle = toggle({ text: 'Activate' });
-    this.toggle.name = '';
+    this.toggle.title = '';
     this.toggle.$checked.subscribe((c) => {
       this.webcam.$active.set(c);
     });
@@ -86,8 +85,8 @@ export class Posenet extends Module {
     // console.log('poses', poses);
   }
 
-  mount(targetSelector) {
-    const target = document.querySelector(targetSelector || `#${this.id}`);
+  mount(t) {
+    const target = t || document.querySelector(`#${this.id}`);
     if (!target) return;
     this.destroy();
     this.$$.app = new Component({

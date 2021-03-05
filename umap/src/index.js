@@ -1,6 +1,6 @@
-import '@marcellejs/core/dist/bundle.css';
+import '@marcellejs/core/dist/marcelle.css';
 import {
-  browser,
+  datasetBrowser,
   webcam,
   mobilenet,
   dataset,
@@ -19,9 +19,9 @@ const input = webcam();
 const featureExtractor = mobilenet();
 
 const label = textfield();
-label.name = 'Instance label';
+label.title = 'Instance label';
 const capture = button({ text: 'Hold to record instances' });
-capture.name = 'Capture instances to the training set';
+capture.title = 'Capture instances to the training set';
 
 const instances = input.$images
   .filter(() => capture.$down.value)
@@ -35,10 +35,10 @@ const instances = input.$images
   .awaitPromises();
 
 const store = dataStore({ location: 'localStorage' });
-const trainingSet = dataset({ name: 'TrainingSet', dataStore: store });
+const trainingSet = dataset({ name: 'TrainingSet-umap', dataStore: store });
 trainingSet.capture(instances);
 
-const trainingSetBrowser = browser(trainingSet);
+const trainingSetBrowser = datasetBrowser(trainingSet);
 
 const trainingSetUMap = umap(trainingSet);
 
@@ -52,12 +52,12 @@ updateUMap.$click.subscribe(() => {
 // -----------------------------------------------------------
 
 const dash = dashboard({
-  title: 'Marcelle Example - Dashboard',
+  title: 'Marcelle Example - Custom UMAP Module',
   author: 'Marcelle Pirates Crew',
 });
 
 dash
-  .page('Data Management')
+  .page('Main')
   .useLeft(input, featureExtractor)
   .use([label, capture], trainingSetBrowser, updateUMap, trainingSetUMap);
 dash.settings.use(trainingSet);

@@ -27,9 +27,10 @@
     }, 5000);
   }
 
+  let mobilenetElt;
   onMount(async () => {
     await tick();
-    input.mount('#posenet');
+    input.mount(mobilenetElt);
     browser.mount();
     sel.mount();
   });
@@ -44,6 +45,25 @@
     dispatch('clearDataset');
   }
 </script>
+
+<div id="left">
+  <!-- <h1 style="font-size: 1.6rem; padding: 6px;">Body Tetris (sort of)</h1> -->
+  <div style="display: flex">
+    <div bind:this={mobilenetElt} id="mobilenet" style="width: 440px;" />
+    <div id="controls">
+      <p>Select an action and record associated postures:</p>
+      <div id={sel.id} style="margin-bottom: 5px" />
+      <button class="btn" on:click={record} style="margin-bottom: 5px">Record Postures</button>
+      <button class="btn danger" on:click={clearDataset}>Clear Data</button>
+      <p style="color: grey; font-size: 0.8em; margin-top: 20px;">Predicted label:</p>
+      <div class="label">{$predictedLabel}</div>
+    </div>
+  </div>
+  <div id={browser.id} />
+  <div id="counter" class:active={msg !== ''}>
+    <span style="background-color: rgba(255, 255, 255, 0.7); padding: 30px;">{msg}</span>
+  </div>
+</div>
 
 <style>
   #left {
@@ -87,22 +107,3 @@
     text-align: center;
   }
 </style>
-
-<div id="left">
-  <!-- <h1 style="font-size: 1.6rem; padding: 6px;">Body Tetris (sort of)</h1> -->
-  <div style="display: flex">
-    <div id="posenet" style="width: 440px;" />
-    <div id="controls">
-      <p>Select an action and record associated postures:</p>
-      <div id={sel.id} style="margin-bottom: 5px" />
-      <button class="btn" on:click={record} style="margin-bottom: 5px">Record Postures</button>
-      <button class="btn danger" on:click={clearDataset}>Clear Data</button>
-      <p style="color: grey; font-size: 0.8em; margin-top: 20px;">Predicted label:</p>
-      <div class="label">{$predictedLabel}</div>
-    </div>
-  </div>
-  <div id={browser.id} />
-  <div id="counter" class:active={msg !== ''}>
-    <span style="background-color: rgba(255, 255, 255, 0.7); padding: 30px;">{msg}</span>
-  </div>
-</div>

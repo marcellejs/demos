@@ -4,8 +4,7 @@ import { TrainingSet, trainMulticlassGMM, MulticlassGMMPredictor } from 'xmmjs';
 export class Gmm extends Module {
   constructor({ gaussians = 3 } = {}) {
     super();
-    this.name = 'gmm';
-    this.description = 'TODO: Gmm description';
+    this.title = 'gmm';
     this.parameters = {
       gaussians: new Stream(gaussians, true),
     };

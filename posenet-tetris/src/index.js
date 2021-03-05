@@ -1,19 +1,19 @@
-import '@marcellejs/core/dist/bundle.css';
+import '@marcellejs/core/dist/marcelle.css';
 import './style.css';
 import {
-  browser,
+  datasetBrowser,
   dataset,
   button,
   parameters,
-  progress,
+  trainingProgress,
   toggle,
   dataStore,
   dashboard,
   textfield,
   trainingPlot,
   batchPrediction,
-  confusion,
-  predictionPlot,
+  confusionMatrix,
+  classificationPlot,
   select,
 } from '@marcellejs/core';
 import { gmm, posenet } from './modules';
@@ -27,9 +27,9 @@ import App from './App.svelte';
 const input = posenet({ joints: ['leftEye', 'rightEye'] });
 
 const label = textfield();
-label.name = 'Instance label';
+label.title = 'Instance label';
 const capture = button({ text: 'Hold to record instances' });
-capture.name = 'Capture instances to the training set';
+capture.title = 'Capture instances to the training set';
 
 let recording = false;
 const instances = input.$joints
@@ -43,22 +43,22 @@ const instances = input.$joints
   .awaitPromises();
 
 const store = dataStore({ location: 'localStorage' });
-const trainingSet = dataset({ name: 'TrainingSet', dataStore: store });
+const trainingSet = dataset({ name: 'TrainingSet-Posenet-tetris', dataStore: store });
 trainingSet.capture(instances);
 
-const trainingSetBrowser = browser(trainingSet);
+const trainingSetBrowser = datasetBrowser(trainingSet);
 
 // -----------------------------------------------------------
 // TRAINING
 // -----------------------------------------------------------
 
 const trainingLauncher = button({ text: 'Train' });
-trainingLauncher.name = 'Training Launcher';
+trainingLauncher.title = 'Training Launcher';
 const classifier = gmm({ gaussians: 3 });
 trainingLauncher.$click.subscribe(() => classifier.train(trainingSet));
 
 const params = parameters(classifier);
-const prog = progress(classifier);
+const prog = trainingProgress(classifier);
 const plotTraining = trainingPlot(classifier);
 
 // -----------------------------------------------------------
@@ -66,7 +66,7 @@ const plotTraining = trainingPlot(classifier);
 // -----------------------------------------------------------
 
 const batchMLP = batchPrediction({ name: 'mlp', dataStore: store });
-const confusionMatrix = confusion(batchMLP);
+const confMat = confusionMatrix(batchMLP);
 
 const predictButton = button({ text: 'Update predictions' });
 predictButton.$click.subscribe(async () => {
@@ -94,7 +94,7 @@ predictedLabel.subscribe((x) => {
   setMove(x);
 });
 
-const plotResults = predictionPlot(predictionStream);
+const plotResults = classificationPlot(predictionStream);
 
 // -----------------------------------------------------------
 // DASHBOARDS
@@ -107,7 +107,7 @@ const dash = dashboard({
 
 dash.page('Data Management').useLeft(input).use([label, capture], trainingSetBrowser);
 dash.page('Training').use(params, trainingLauncher, prog, plotTraining);
-dash.page('Batch Prediction').use(predictButton, confusionMatrix);
+dash.page('Batch Prediction').use(predictButton, confMat);
 dash.page('Real-time Prediction').useLeft(input).use(tog, plotResults);
 dash.settings.use(trainingSet);
 
@@ -199,5 +199,7 @@ app.$on('recording', (value) => {
 });
 
 setTimeout(() => {
-  classifier.train(trainingSet);
+  if (trainingSet.$count.value > 0) {
+    classifier.train(trainingSet);
+  }
 }, 2000);

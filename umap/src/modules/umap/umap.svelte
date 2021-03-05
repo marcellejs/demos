@@ -1,9 +1,9 @@
+<svelte:options accessors />
+
 <script>
-  import s from 'scatter-gl';
+  import { ScatterGL } from 'scatter-gl';
   import { onMount } from 'svelte';
   import { ModuleBase } from '@marcellejs/core';
-
-  const { ScatterGL } = s;
 
   export let title;
   export let embedding;
@@ -47,14 +47,12 @@
   });
 </script>
 
+<ModuleBase {title}>
+  <div id="scatter-container" bind:this={scatterContainer} />
+</ModuleBase>
+
 <style>
   #scatter-container {
     height: 400px;
   }
 </style>
-
-<svelte:options accessors />
-
-<ModuleBase {title}>
-  <div id="scatter-container" bind:this={scatterContainer} />
-</ModuleBase>
