@@ -1,4 +1,4 @@
-# marcelle-umap
+# umap
 
 > A [Marcelle](https://marcelle.netlify.app) Application
 

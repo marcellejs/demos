@@ -1,9 +1,7 @@
-/* eslint-disable import/no-extraneous-dependencies */
-// import fs from 'fs';
-import svelte from 'rollup-plugin-svelte';
+/* eslint-env node */
+import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { join, resolve } from 'path';
 import { render } from 'ejs';
-// import examples from './node_modules/@marcellejs/core/examples/meta.json';
 import pkg from './package.json';
 
 const demos = pkg.workspaces.map((path) => {
@@ -21,6 +19,7 @@ function injectHtml({ injectData = {}, injectOptions = {}, tags = [] } = {}) {
     transformIndexHtml: {
       enforce: 'pre',
       transform(html, { path }) {
+        console.log('path', path);
         if (path === '/index.html') {
           return {
             html: render(html, injectData, injectOptions),
@@ -55,7 +54,6 @@ export default {
     injectHtml({
       injectData: {
         demos,
-        examples: [],
       },
     }),
     svelte({ emitCss: false }),

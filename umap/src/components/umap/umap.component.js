@@ -1,8 +1,8 @@
-import { Module, Stream } from '@marcellejs/core';
+import { Component, Stream } from '@marcellejs/core';
 import { UMAP } from 'umap-js';
-import Component from './umap.svelte';
+import View from './umap.view.svelte';
 
-export class Umap extends Module {
+export class Umap extends Component {
   constructor(dataset, supervised = false) {
     super();
     this.$embedding = new Stream([], true);
@@ -14,11 +14,9 @@ export class Umap extends Module {
   }
 
   async render() {
-    const instances = await this.dataset.instanceService.find({
-      query: { $select: ['features', 'label'] },
-    });
-    const umapData = instances.data.reduce((d, x) => d.concat([x.features[0]]), []);
-    const labels = instances.data.map((x) => x.label);
+    const instances = await this.dataset.items().select(['x', 'y']).toArray();
+    const umapData = instances.reduce((d, { x }) => d.concat([x[0]]), []);
+    const labels = instances.map((x) => x.y);
     this.$labels.set(labels);
     const umap = new UMAP({ nComponents: 2 });
     if (this.supervised) {
@@ -30,14 +28,14 @@ export class Umap extends Module {
     this.$embedding.set(embedding);
   }
 
-  mount(targetSelector) {
-    const target = document.querySelector(targetSelector || `#${this.id}`);
-    if (!target) return;
+  mount(target) {
+    const t = target || document.querySelector(`#${this.id}`);
+    if (!t) return;
     this.destroy();
-    this.$$.app = new Component({
-      target,
+    this.$$.app = new View({
+      target: t,
       props: {
-        title: this.name,
+        title: this.title,
         embedding: this.$embedding,
         labels: this.$labels,
       },

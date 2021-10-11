@@ -2,43 +2,44 @@ import '@marcellejs/core/dist/marcelle.css';
 import {
   datasetBrowser,
   webcam,
-  mobilenet,
+  mobileNet,
   dataset,
   button,
   dataStore,
   dashboard,
-  textfield,
+  textField,
 } from '@marcellejs/core';
-import { umap } from './modules';
+import { umap } from './components';
 
 // -----------------------------------------------------------
 // INPUT PIPELINE & DATA CAPTURE
 // -----------------------------------------------------------
 
 const input = webcam();
-const featureExtractor = mobilenet();
+const featureExtractor = mobileNet();
 
-const label = textfield();
+const label = textField();
 label.title = 'Instance label';
 const capture = button({ text: 'Hold to record instances' });
 capture.title = 'Capture instances to the training set';
 
-const instances = input.$images
-  .filter(() => capture.$down.value)
-  .map(async (img) => ({
-    type: 'image',
-    data: img,
-    label: label.$text.value,
-    thumbnail: input.$thumbnails.value,
-    features: await featureExtractor.process(img),
-  }))
-  .awaitPromises();
-
-const store = dataStore({ location: 'localStorage' });
-const trainingSet = dataset({ name: 'TrainingSet-umap', dataStore: store });
-trainingSet.capture(instances);
-
+const store = dataStore('localStorage');
+const trainingSet = dataset('training-set-umap', store);
 const trainingSetBrowser = datasetBrowser(trainingSet);
+
+input.$images
+  .filter(() => capture.$pressed.value)
+  .map(async (x) => ({
+    x: await featureExtractor.process(x),
+    y: label.$text.value,
+    thumbnail: input.$thumbnails.value,
+  }))
+  .awaitPromises()
+  .subscribe(trainingSet.create.bind(trainingSet));
+
+// -----------------------------------------------------------
+// UMAP
+// -----------------------------------------------------------
 
 const trainingSetUMap = umap(trainingSet);
 
@@ -58,8 +59,8 @@ const dash = dashboard({
 
 dash
   .page('Main')
-  .useLeft(input, featureExtractor)
+  .sidebar(input, featureExtractor)
   .use([label, capture], trainingSetBrowser, updateUMap, trainingSetUMap);
 dash.settings.use(trainingSet);
 
-dash.start();
+dash.show();

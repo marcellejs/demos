@@ -3,7 +3,7 @@
 <script>
   import { ScatterGL } from 'scatter-gl';
   import { onMount } from 'svelte';
-  import { ModuleBase } from '@marcellejs/core';
+  import { ViewContainer } from '@marcellejs/core';
 
   export let title;
   export let embedding;
@@ -47,9 +47,9 @@
   });
 </script>
 
-<ModuleBase {title}>
+<ViewContainer {title}>
   <div id="scatter-container" bind:this={scatterContainer} />
-</ModuleBase>
+</ViewContainer>
 
 <style>
   #scatter-container {

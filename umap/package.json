@@ -12,22 +12,23 @@
     "email": "me@julesfrancoise.com"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --force",
     "build": "vite build"
   },
   "dependencies": {
-    "@marcellejs/core": "^0.2.0",
-    "scatter-gl": "^0.0.7",
-    "svelte": "^3.29.4",
+    "@marcellejs/core": "^0.4.0",
+    "scatter-gl": "^0.0.11",
     "umap-js": "^1.3.3"
   },
   "devDependencies": {
-    "eslint": "^7.12.1",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-svelte3": "^2.7.3",
-    "rollup-plugin-svelte": "^7.1.0",
-    "vite": "^2.0.5"
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.27",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-svelte3": "^3.2.0",
+    "prettier": "^2.2.0",
+    "svelte": "^3.43.1",
+    "vite": "^2.6.5"
   }
 }
