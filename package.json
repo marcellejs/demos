@@ -2,6 +2,7 @@
   "name": "@marcellejs/demos",
   "private": true,
   "workspaces": [
+    "mobilenet-tetris",
     "umap"
   ],
   "scripts": {

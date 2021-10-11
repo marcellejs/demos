@@ -4,19 +4,19 @@ import {
   datasetBrowser,
   dataset,
   button,
-  parameters,
+  modelParameters,
   trainingProgress,
   toggle,
   dataStore,
   dashboard,
-  textfield,
+  textField,
   batchPrediction,
   confusionMatrix,
-  classificationPlot,
+  confidencePlot,
   select,
-  mobilenet,
+  mobileNet,
   webcam,
-  knn,
+  knnClassifier,
 } from '@marcellejs/core';
 import { setMove, reset, stop } from './tetris';
 import App from './App.svelte';
@@ -26,31 +26,27 @@ import App from './App.svelte';
 // -----------------------------------------------------------
 
 const input = webcam();
-const featureExtractor = mobilenet();
+const featureExtractor = mobileNet();
 
-const label = textfield();
+const label = textField();
 label.title = 'Instance label';
 const capture = button({ text: 'Hold to record instances' });
 capture.title = 'Capture instances to the training set';
 
-let recording = false;
-const instances = input.$images
-  .filter(() => capture.$down.value || recording)
-  .map(async (img) => ({
-    type: 'image',
-    data: img,
-    label: label.$text.value,
-    thumbnail: input.$thumbnails.value,
-    features: await featureExtractor.process(img),
-  }))
-  .awaitPromises();
-
-const store = dataStore({ location: 'localStorage' });
-const trainingSet = dataset({ name: 'TrainingSet-mobilenet-tetris', dataStore: store });
-
-trainingSet.capture(instances);
-
+const store = dataStore('localStorage');
+const trainingSet = dataset('training-set-mobilenet-tetris', store);
 const trainingSetBrowser = datasetBrowser(trainingSet);
+
+let recording = false;
+input.$images
+  .filter(() => capture.$pressed.value || recording)
+  .map(async (img) => ({
+    x: await featureExtractor.process(img),
+    thumbnail: input.$thumbnails.value,
+    y: label.$text.value,
+  }))
+  .awaitPromises()
+  .subscribe(trainingSet.create.bind(trainingSet));
 
 // -----------------------------------------------------------
 // TRAINING
@@ -58,11 +54,11 @@ const trainingSetBrowser = datasetBrowser(trainingSet);
 
 const trainingLauncher = button({ text: 'Train' });
 trainingLauncher.title = 'Training Launcher';
-const classifier = knn({ dataStore: store });
+const classifier = knnClassifier({ dataStore: store });
 classifier.sync('mobilenet-tetris-classifier');
 trainingLauncher.$click.subscribe(() => classifier.train(trainingSet));
 
-const params = parameters(classifier);
+const params = modelParameters(classifier);
 const prog = trainingProgress(classifier);
 
 // -----------------------------------------------------------
@@ -95,7 +91,7 @@ predictedLabel.subscribe((x) => {
   setMove(x);
 });
 
-const plotResults = classificationPlot(predictionStream);
+const plotResults = confidencePlot(predictionStream);
 
 // -----------------------------------------------------------
 // DASHBOARDS
@@ -106,10 +102,10 @@ const dash = dashboard({
   author: 'Marcelle Pirates Crew',
 });
 
-dash.page('Data Management').useLeft(input).use([label, capture], trainingSetBrowser);
+dash.page('Data Management').sidebar(input).use([label, capture], trainingSetBrowser);
 dash.page('Training').use(params, trainingLauncher, prog);
 dash.page('Batch Prediction').use(predictButton, confMat);
-dash.page('Real-time Prediction').useLeft(input).use(tog, plotResults);
+dash.page('Real-time Prediction').sidebar(input).use(tog, plotResults);
 dash.settings.use(trainingSet);
 
 let playing = false;

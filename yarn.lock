@@ -133,7 +133,7 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
-"@marcellejs/core@^0.4.0":
+"@marcellejs/core@^0.4.0", "@marcellejs/core@^0.4.2":
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/@marcellejs/core/-/core-0.4.2.tgz#2893b397413eab49dca0b94b530ee2bf6ba3e4f4"
   integrity sha512-1ZqzPqRa9nXGT1/okfr7j9uX7cSd7rBlRxzN65suhspDxVOz2MEtsrlFOFP5ymoRicq/mQLmLu9nz6TRes9tbQ==
@@ -269,7 +269,7 @@
   resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-converter/-/tfjs-converter-3.9.0.tgz#e00709002cbe04ff5cc43358d4a5662795513071"
   integrity sha512-ftegwQlGkyDCxZGhAVfMyWWXqpNhnyESvNY3oFAUV4eN6i/mmBTCSOQ5AX5VR5lr7PNYPWGO5sJ10Q5HeTPfgw==
 
-"@tensorflow/tfjs-core@^3.7.0":
+"@tensorflow/tfjs-core@^3.7.0", "@tensorflow/tfjs-core@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@tensorflow/tfjs-core/-/tfjs-core-3.9.0.tgz#5ca2356a14a58263840a6e3caee2467780db9450"
   integrity sha512-wQ+VMsbvCne2OsogiNtRP8Mc01LnRGvAYQ0SGaDa4+1uwY2jsMk5GZjG66JQvf/Ppw8wyvKF170eh0yyCBgfcg==
@@ -2292,6 +2292,18 @@ vite@^2.6.5:
   optionalDependencies:
     fsevents "~2.3.2"
 
+vite@^2.6.7:
+  version "2.6.7"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.6.7.tgz#e15c1d8327950720b5d7c4ec3fb36a5a58ccf7cb"
+  integrity sha512-ewk//jve9k6vlU8PfJmWUHN8k0YYdw4VaKOMvoQ3nT2Pb6k5OSMKQi4jPOzVH/TlUqMsCrq7IJ80xcuDDVyigg==
+  dependencies:
+    esbuild "^0.13.2"
+    postcss "^8.3.8"
+    resolve "^1.20.0"
+    rollup "^2.57.0"
+  optionalDependencies:
+    fsevents "~2.3.2"
+
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
@@ -2342,6 +2354,11 @@ xmlhttprequest-ssl@~1.6.2:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/xmlhttprequest-ssl/-/xmlhttprequest-ssl-1.6.3.tgz#03b713873b01659dfa2c1c5d056065b27ddc2de6"
   integrity sha512-3XfeQE/wNkvrIktn2Kf0869fC0BN6UpydVasGIeSm2B1Llihf7/0UfZM+eCkOw3P7bP4+qPgqhm7ZoxuJtFU0Q==
+
+xmmjs@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/xmmjs/-/xmmjs-0.0.3.tgz#b8925f82f47aed0fd992a1f5c1de15a364d0cda2"
+  integrity sha512-u8QBEszcVOS+OJiLcU8nHts91CbRmwQ20mB6qTm2NJg17aoZ0RRbMHrnTZCMqwLVTPbmemml4RdlVMIkF5eW7g==
 
 yallist@^4.0.0:
   version "4.0.0"
