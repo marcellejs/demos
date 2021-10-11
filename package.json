@@ -3,8 +3,7 @@
   "private": true,
   "workspaces": [
     "umap",
-    "mobilenet-tetris",
-    "posenet-tetris"
+    "mobilenet-tetris"
   ],
   "scripts": {
     "dev": "vite",
