@@ -7,6 +7,7 @@ import {
   toggle,
   detectionBoxes,
   webcam,
+  notification,
 } from '@marcellejs/core';
 
 // -----------------------------------------------------------
@@ -24,10 +25,18 @@ const cocoPredictionStream = source.$images
   .map(async (img) => cocoClassifier.predict(img))
   .awaitPromises();
 
-const cocoBetterPredictions = cocoPredictionStream.map(({ outputs }) => ({
-  label: outputs[0].class,
-  confidences: outputs.reduce((x, y) => ({ ...x, [y.class]: y.confidence }), {}),
-}));
+cocoPredictionStream
+  .filter(({ outputs }) => outputs.length === 0)
+  .subscribe(() => {
+    notification({ title: 'No object detected', message: 'try with another image' });
+  });
+
+const cocoBetterPredictions = cocoPredictionStream
+  .filter(({ outputs }) => outputs.length > 0)
+  .map(({ outputs }) => ({
+    label: outputs[0].class,
+    confidences: outputs.reduce((x, y) => ({ ...x, [y.class]: y.confidence }), {}),
+  }));
 
 const objDetectionVis = detectionBoxes(source.$images, cocoPredictionStream);
 const cocoPlotResults = confidencePlot(cocoBetterPredictions);
@@ -43,10 +52,13 @@ const rtDetectStream = wc.$images
   .filter(() => tog.$checked.value)
   .map(async (img) => cocoClassifier.predict(img))
   .awaitPromises();
-const realtimePredictions = rtDetectStream.map(({ outputs }) => ({
-  label: outputs[0].class,
-  confidences: outputs.reduce((x, y) => ({ ...x, [y.class]: y.confidence }), {}),
-}));
+
+const realtimePredictions = rtDetectStream
+  .filter(({ outputs }) => outputs.length > 0)
+  .map(({ outputs }) => ({
+    label: outputs[0].class,
+    confidences: outputs.reduce((x, y) => ({ ...x, [y.class]: y.confidence }), {}),
+  }));
 
 const imgStream = wc.$images.filter(() => tog.$checked.value);
 
