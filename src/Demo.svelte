@@ -26,7 +26,7 @@
     <a
       class="btn code"
       target="_blank"
-      href="https://github.com/marcellejs/uist2021demos/blob/main/{demo.path}/"
+      href="https://github.com/marcellejs/demos/tree/main/{demo.path}/"
     >
       View Source
       <GithubLogo />
