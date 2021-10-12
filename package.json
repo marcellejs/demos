@@ -16,6 +16,6 @@
     "svelte-select": "^4.4.3"
   },
   "dependencies": {
-    "@marcellejs/core": "^0.4.3"
+    "@marcellejs/core": "^0.4.4"
   }
 }

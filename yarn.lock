@@ -133,10 +133,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.0.tgz#87de7af9c231826fdd68ac7258f77c429e0e5fcf"
   integrity sha512-wdppn25U8z/2yiaT6YGquE6X8sSv7hNMWSXYSSU1jGv/yd6XqjXgTDJ8KP4NgjTXfJ3GbRjeeb8RTV7a/VpM+w==
 
-"@marcellejs/core@^0.4.3":
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/@marcellejs/core/-/core-0.4.3.tgz#3a8299629d6901f7de219f93b95b497ad45d980e"
-  integrity sha512-idIQ22mestsl3r9/IurAhDniiJ0zPPPvpacISZ/607i6XHtZg0JF9NWjnPOWZlYAvOHaeH8ei+y2iL+mrkq4ew==
+"@marcellejs/core@^0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@marcellejs/core/-/core-0.4.4.tgz#f8fb86c1a5f2609cdbc7efbf49da9c0b944041d6"
+  integrity sha512-KtV13rjWavUWWVMy8iIBI223nA4dRUTV6Ey2di3ki07ycoMQalq2Q6A9vHMsdFf6c3TCkk4LkgTqT5uNIIAy8g==
   dependencies:
     "@feathersjs/authentication-client" "^4.5.11"
     "@feathersjs/client" "^4.5.11"
