@@ -11,7 +11,9 @@
   },
   "devDependencies": {
     "ejs": "^3.1.5",
-    "fs-extra": "^9.0.1"
+    "fs-extra": "^9.0.1",
+    "svelte-bricks": "^0.1.0",
+    "svelte-select": "^4.4.3"
   },
   "dependencies": {
     "@marcellejs/core": "^0.4.3"

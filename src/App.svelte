@@ -1,6 +1,48 @@
 <script>
+  import Select from 'svelte-select';
+  import Masonry from 'svelte-bricks';
+
   import Demo from './Demo.svelte';
   import sections from '../meta';
+
+  function sorted(arr) {
+    const res = [...arr];
+    res.sort();
+    return res;
+  }
+
+  $: demos = sections.flatMap(({ demos }) => demos);
+
+  const filters = ['data', 'training', 'task', 'layout', 'features'];
+
+  $: filterValues = filters.map(
+    (f) =>
+      // ['all'].concat(
+      sorted(
+        // eslint-disable-next-line no-undef
+        Array.from(new Set(demos.flatMap((x) => x[f] || [])))
+      )
+    // )
+  );
+
+  $: showDemos = demos.filter((x) => {
+    const matchFilters = filters.map(
+      (f, i) =>
+        currentFilters[i].length === 0 ||
+        currentFilters[i].reduce((a, b) => a || (x[f] || []).includes(b), false)
+    );
+    return matchFilters.reduce((a, b) => a && b, true);
+  });
+
+  $: currentFilters = filters.map((_, i) => []);
+
+  let [minColWidth, maxColWidth, gap] = [300, 400, 0];
+  let width, height;
+
+  function handleSelect(values, i) {
+    currentFilters[i] = (values || []).map(({ value }) => value);
+    currentFilters = currentFilters;
+  }
 </script>
 
 <div class="container">
@@ -8,24 +50,45 @@
     <h1>Marcelle - Examples & Demos</h1>
   </header>
   <main>
-    <div class="privacy">
-      <strong>Privacy Notice:</strong> Cookies are necessary to run these demos.
-      In these demos data is stored in your web browser. None of your input will
-      be transfered to a remote server.
+    <div class="controls-container">
+      <h2>Filter Demos</h2>
+      <div class="controls">
+        {#each filters as f, i}
+          <div>
+            <p>{f}</p>
+            <Select
+              items={filterValues[i]}
+              isMulti={true}
+              on:select={(e) => handleSelect(e.detail, i)}
+            />
+          </div>
+        {/each}
+      </div>
     </div>
-    {#each sections as { title, description, demos }}
-      <section>
-        <h2>{title}</h2>
-        <!-- <p>{description}</p> -->
-
-        <div class="demo-container">
-          {#each demos as demo}
-            <Demo {demo} />
-          {/each}
-        </div>
-      </section>
-    {/each}
+    <div>
+      <Masonry
+        items={showDemos}
+        {minColWidth}
+        {maxColWidth}
+        {gap}
+        let:item
+        bind:width
+        bind:height
+      >
+        <Demo demo={item} />
+      </Masonry>
+    </div>
+    <!-- <div class="demo-container">
+      {#each showDemos as demo}
+        <Demo {demo} />
+      {/each}
+    </div> -->
   </main>
+  <div class="privacy">
+    <strong>Privacy Notice:</strong> Cookies are necessary to run these demos. In
+    these demos data is stored in your web browser. None of your input will be transfered
+    to a remote server.
+  </div>
   <footer>
     <a href="https://marcelle.dev">Back to marcelle.dev</a>
     © 2020 Marcelle Pirates Crew
@@ -58,37 +121,10 @@
     min-height: 100vh;
   }
 
-  section {
-    background-color: white;
-    border-radius: 0.5rem;
-    padding: 0.5rem;
-  }
-
-  h2 {
-    margin: 1rem 4rem;
-    padding: 12px;
-    font-size: 1.6rem;
-    font-weight: 500;
-    color: white;
-    color: #3d405b;
-    border-bottom: 4px solid #3d405b;
-  }
-
-  .demo-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-
   p {
     text-align: left;
     padding: 1rem 0;
     margin: 0 4rem;
-  }
-
-  @media (max-width: 560px) {
-    .demo-container {
-      grid-template-columns: 1fr;
-    }
   }
 
   .privacy {
@@ -97,6 +133,37 @@
     padding: 1rem 0;
     margin: 0 4rem;
     border-radius: 4px;
+  }
+
+  .controls-container {
+    border-top: 2px solid lightsteelblue;
+    border-bottom: 2px solid lightsteelblue;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .controls-container h2 {
+    padding-bottom: 8px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: steelblue;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .controls > div {
+    margin: 0 0.25rem;
+    width: 30%;
+  }
+
+  .controls > div > p {
+    text-align: center;
+    padding: 0;
   }
 
   footer {
