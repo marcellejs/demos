@@ -16,7 +16,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@marcellejs/core": "^0.4.2",
+    "@marcellejs/core": "^0.4.3",
     "@tensorflow/tfjs-core": "^3.9.0",
     "xmmjs": "^0.0.3"
   },

@@ -16,7 +16,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "@marcellejs/core": "^0.4.0",
+    "@marcellejs/core": "^0.4.3",
     "scatter-gl": "^0.0.11",
     "umap-js": "^1.3.3"
   },
