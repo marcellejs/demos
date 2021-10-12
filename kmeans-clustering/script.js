@@ -65,9 +65,9 @@ const featureStream = new Stream([]);
 trainingSet.$changes.subscribe(async (changes) => {
   for (const { level, type, data } of changes) {
     if (level === 'instance' && type === 'created') {
-      featureStream.set([data.x[0], data.x[1]]);
+      featureStream.set([[data.x[0], data.x[1]]]);
     } else if (level === 'instance' && type === 'removed') {
-      featureStream.set([data.x[0], data.x[1]]);
+      featureStream.set([[data.x[0], data.x[1]]]);
     } else {
       const allInstances = await trainingSet.items().select(['x']).toArray();
       featureStream.set(allInstances.map((x) => [x.x[0][0], x.x[0][1]]));
