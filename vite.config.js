@@ -41,24 +41,22 @@ export default {
   plugins: [
     injectHtml({
       injectData: {
-        demos: meta.flatMap(({ demos }) => demos),
+        demos: meta,
       },
     }),
     svelte({ emitCss: false }),
   ],
   build: {
     rollupOptions: {
-      input: meta
-        .flatMap(({ demos }) => demos)
-        .reduce(
-          (o, x) => ({
-            ...o,
-            [toCamelCase(x.path)]: resolve(__dirname, x.path, 'index.html'),
-          }),
-          {
-            main: resolve(__dirname, 'index.html'),
-          },
-        ),
+      input: meta.reduce(
+        (o, x) => ({
+          ...o,
+          [toCamelCase(x.path)]: resolve(__dirname, x.path, 'index.html'),
+        }),
+        {
+          main: resolve(__dirname, 'index.html'),
+        },
+      ),
     },
   },
 };
