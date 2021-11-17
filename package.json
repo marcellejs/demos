@@ -1,6 +1,7 @@
 {
   "name": "@marcellejs/demos",
   "private": true,
+  "version": "0.5.0",
   "workspaces": [
     "mobilenet-tetris",
     "umap"
