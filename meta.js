@@ -96,6 +96,15 @@ export default [
     layout: ['dashboard'],
   },
   {
+    name: 'Diabetes Regression with Scikit-Learn',
+    path: 'diabetes',
+    description: 'Diabetes disease progression prediction using scikit-learn and ONNX',
+    data: ['CSV'],
+    training: ['python'],
+    task: ['regression'],
+    layout: ['dashboard'],
+  },
+  {
     name: 'UMAP',
     path: 'umap',
     description: 'Custom component implementing dataset visualization with UMAP',
