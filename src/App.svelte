@@ -3,15 +3,13 @@
   import Masonry from 'svelte-bricks';
 
   import Demo from './Demo.svelte';
-  import sections from '../meta';
+  import demos from '../meta';
 
   function sorted(arr) {
     const res = [...arr];
     res.sort();
     return res;
   }
-
-  $: demos = sections.flatMap(({ demos }) => demos);
 
   const filters = ['data', 'training', 'task', 'layout', 'features'];
 
@@ -20,8 +18,8 @@
       // ['all'].concat(
       sorted(
         // eslint-disable-next-line no-undef
-        Array.from(new Set(demos.flatMap((x) => x[f] || [])))
-      )
+        Array.from(new Set(demos.flatMap((x) => x[f] || []))),
+      ),
     // )
   );
 
@@ -29,7 +27,7 @@
     const matchFilters = filters.map(
       (f, i) =>
         currentFilters[i].length === 0 ||
-        currentFilters[i].reduce((a, b) => a || (x[f] || []).includes(b), false)
+        currentFilters[i].reduce((a, b) => a || (x[f] || []).includes(b), false),
     );
     return matchFilters.reduce((a, b) => a && b, true);
   });
@@ -66,15 +64,7 @@
       </div>
     </div>
     <div>
-      <Masonry
-        items={showDemos}
-        {minColWidth}
-        {maxColWidth}
-        {gap}
-        let:item
-        bind:width
-        bind:height
-      >
+      <Masonry items={showDemos} {minColWidth} {maxColWidth} {gap} let:item bind:width bind:height>
         <Demo demo={item} />
       </Masonry>
     </div>
@@ -85,9 +75,8 @@
     </div> -->
   </main>
   <div class="privacy">
-    <strong>Privacy Notice:</strong> Cookies are necessary to run these demos. In
-    these demos data is stored in your web browser. None of your input will be transfered
-    to a remote server.
+    <strong>Privacy Notice:</strong> Cookies are necessary to run these demos. In these demos data is
+    stored in your web browser. None of your input will be transfered to a remote server.
   </div>
   <footer>
     <a href="https://marcelle.dev">Back to marcelle.dev</a>
