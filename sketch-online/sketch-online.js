@@ -52,6 +52,12 @@ trainingSet.$changes.subscribe(async (changes) => {
       message: 'You need to have at least two classes to train the model',
       duration: 5000,
     });
+  } else if (trainingSet.$count.value < 4) {
+    notification({
+      title: 'Tip',
+      message: 'You need to have at least two example in each class',
+      duration: 5000,
+    });
   } else {
     classifier.train(trainingSet);
   }
