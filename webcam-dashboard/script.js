@@ -12,7 +12,7 @@ import {
   modelParameters,
   confidencePlot,
   trainingProgress,
-  textField,
+  textInput,
   toggle,
   trainingPlot,
   webcam,
@@ -26,9 +26,9 @@ import {
 const input = webcam();
 const featureExtractor = mobileNet();
 
-const label = textField();
+const label = textInput();
 label.title = 'Instance label';
-const capture = button({ text: 'Hold to record instances' });
+const capture = button('Hold to record instances');
 capture.title = 'Capture instances to the training set';
 
 const store = dataStore('localStorage');
@@ -37,14 +37,14 @@ const trainingSetBrowser = datasetBrowser(trainingSet);
 
 input.$images
   .filter(() => capture.$pressed.value)
-  .map((x) => ({ x, y: label.$text.value, thumbnail: input.$thumbnails.value }))
+  .map((x) => ({ x, y: label.$value.value, thumbnail: input.$thumbnails.value }))
   .subscribe(trainingSet.create.bind(trainingSet));
 
 // -----------------------------------------------------------
 // TRAINING
 // -----------------------------------------------------------
 
-const b = button({ text: 'Train' });
+const b = button('Train');
 b.title = 'Training Launcher';
 const classifier = mlpClassifier({ layers: [64, 32], epochs: 20, dataStore: store }).sync(
   'mlp-dashboard',
@@ -69,7 +69,7 @@ const plotTraining = trainingPlot(classifier);
 const batchMLP = batchPrediction({ name: 'mlp', dataStore: store });
 const confMat = confusionMatrix(batchMLP);
 
-const predictButton = button({ text: 'Update predictions' });
+const predictButton = button('Update predictions');
 predictButton.$click.subscribe(async () => {
   if (!classifier.ready) {
     throwError(new Error('No classifier has been trained'));
@@ -83,26 +83,26 @@ predictButton.$click.subscribe(async () => {
   );
 });
 
-// -----------------------------------------------------------
-// REAL-TIME PREDICTION
-// -----------------------------------------------------------
+// // -----------------------------------------------------------
+// // REAL-TIME PREDICTION
+// // -----------------------------------------------------------
 
-const tog = toggle({ text: 'toggle prediction' });
-tog.$checked.subscribe((checked) => {
-  if (checked && !classifier.ready) {
-    throwError(new Error('No classifier has been trained'));
-    setTimeout(() => {
-      tog.$checked.set(false);
-    }, 500);
-  }
-});
+// const tog = toggle('toggle prediction');
+// tog.$checked.subscribe((checked) => {
+//   if (checked && !classifier.ready) {
+//     throwError(new Error('No classifier has been trained'));
+//     setTimeout(() => {
+//       tog.$checked.set(false);
+//     }, 500);
+//   }
+// });
 
-const predictionStream = input.$images
-  .filter(() => tog.$checked.value && classifier.ready)
-  .map(async (img) => classifier.predict(await featureExtractor.process(img)))
-  .awaitPromises();
+// const predictionStream = input.$images
+//   .filter(() => tog.$checked.value && classifier.ready)
+//   .map(async (img) => classifier.predict(await featureExtractor.process(img)))
+//   .awaitPromises();
 
-const plotResults = confidencePlot(predictionStream);
+// const plotResults = confidencePlot(predictionStream);
 
 // -----------------------------------------------------------
 // DASHBOARDS
@@ -119,7 +119,7 @@ dash
   .use([label, capture], trainingSetBrowser);
 dash.page('Training').use(params, b, prog, plotTraining);
 dash.page('Batch Prediction').use(predictButton, confMat);
-dash.page('Real-time Prediction').sidebar(input).use(tog, plotResults);
-dash.settings.dataStores(store).datasets(trainingSet).models(classifier).predictions(batchMLP);
+// dash.page('Real-time Prediction').sidebar(input).use(tog, plotResults);
+// dash.settings.dataStores(store).datasets(trainingSet).models(classifier).predictions(batchMLP);
 
 dash.show();

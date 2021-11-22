@@ -9,7 +9,7 @@ import {
   toggle,
   dataStore,
   dashboard,
-  textField,
+  textInput,
   batchPrediction,
   confusionMatrix,
   confidencePlot,
@@ -28,9 +28,9 @@ import App from './App.svelte';
 const input = webcam();
 const featureExtractor = mobileNet();
 
-const label = textField();
+const label = textInput();
 label.title = 'Instance label';
-const capture = button({ text: 'Hold to record instances' });
+const capture = button('Hold to record instances');
 capture.title = 'Capture instances to the training set';
 
 const store = dataStore('localStorage');
@@ -43,7 +43,7 @@ input.$images
   .map(async (img) => ({
     x: await featureExtractor.process(img),
     thumbnail: input.$thumbnails.value,
-    y: label.$text.value,
+    y: label.$value.value,
   }))
   .awaitPromises()
   .subscribe(trainingSet.create.bind(trainingSet));
@@ -52,7 +52,7 @@ input.$images
 // TRAINING
 // -----------------------------------------------------------
 
-const trainingLauncher = button({ text: 'Train' });
+const trainingLauncher = button('Train');
 trainingLauncher.title = 'Training Launcher';
 const classifier = knnClassifier({ dataStore: store });
 classifier.sync('mobilenet-tetris-classifier');
@@ -68,7 +68,7 @@ const prog = trainingProgress(classifier);
 const batchMLP = batchPrediction({ name: 'mlp', dataStore: store });
 const confMat = confusionMatrix(batchMLP);
 
-const predictButton = button({ text: 'Update predictions' });
+const predictButton = button('Update predictions');
 predictButton.$click.subscribe(async () => {
   await batchMLP.clear();
   await batchMLP.predict(classifier, trainingSet);
@@ -78,7 +78,7 @@ predictButton.$click.subscribe(async () => {
 // REAL-TIME PREDICTION
 // -----------------------------------------------------------
 
-const tog = toggle({ text: 'toggle prediction' });
+const tog = toggle('toggle prediction');
 
 const predictionStream = input.$images
   .filter(() => tog.$checked.value)
@@ -135,7 +135,7 @@ const sel = select({
     'rotate-counterclockwise ',
   ],
 });
-sel.$value.subscribe((x) => label.$text.set(x));
+sel.$value.subscribe((x) => label.$value.set(x));
 
 const app = new App({
   target: document.querySelector('#tetris-controls'),

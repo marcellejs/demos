@@ -9,7 +9,7 @@ import {
   mobileNet,
   confidencePlot,
   sketchPad,
-  textField,
+  textInput,
   trainingProgress,
 } from '@marcellejs/core';
 
@@ -22,11 +22,11 @@ const classifier = mlpClassifier({ layers: [64, 32], epochs: 20, dataStore: stor
 classifier.sync('sketch-classifier');
 
 // Additional widgets and visualizations
-const classLabel = textField();
+const classLabel = textInput();
 classLabel.title = 'Label';
-const captureButton = button({ text: 'Capture this drawing' });
-const trainButton = button({ text: 'Train the classifier' });
-const predictButton = button({ text: 'Predict label' });
+const captureButton = button('Capture this drawing');
+const trainButton = button('Train the classifier');
+const predictButton = button('Predict label');
 
 const trainingSetBrowser = datasetBrowser(trainingSet);
 const progress = trainingProgress(classifier);
@@ -36,7 +36,7 @@ const $instances = captureButton.$click
   .sample(input.$images.zip((thumbnail, data) => ({ thumbnail, data }), input.$thumbnails))
   .map(async ({ thumbnail, data }) => ({
     x: await featureExtractor.process(data),
-    y: classLabel.$text.value,
+    y: classLabel.$value.value,
     thumbnail,
   }))
   .awaitPromises();

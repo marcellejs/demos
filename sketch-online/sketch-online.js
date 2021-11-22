@@ -9,7 +9,7 @@ import {
   mobileNet,
   confidencePlot,
   sketchPad,
-  textField,
+  textInput,
   trainingProgress,
   notification,
 } from '@marcellejs/core';
@@ -23,8 +23,8 @@ const classifier = mlpClassifier({ layers: [64, 32], epochs: 20, dataStore: stor
 classifier.sync('sketch-classifier');
 
 // Additional widgets and visualizations
-const classLabel = textField();
-const captureButton = button({ text: 'Capture this drawing' });
+const classLabel = textInput();
+const captureButton = button('Capture this drawing');
 
 const trainingSetBrowser = datasetBrowser(trainingSet);
 const progress = trainingProgress(classifier);
@@ -34,7 +34,7 @@ const $instances = captureButton.$click
   .sample(input.$images.zip((thumbnail, data) => ({ thumbnail, data }), input.$thumbnails))
   .map(async ({ thumbnail, data }) => ({
     x: await featureExtractor.process(data),
-    y: classLabel.$text.value,
+    y: classLabel.$value.value,
     thumbnail,
   }))
   .awaitPromises();
@@ -70,7 +70,7 @@ const $predictions = $features
 const predictionViz = confidencePlot($predictions);
 
 $predictions.subscribe(({ label }) => {
-  classLabel.$text.set(label);
+  classLabel.$value.set(label);
 });
 
 // Dashboard definition

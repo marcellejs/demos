@@ -7,7 +7,7 @@ import {
   button,
   dataStore,
   dashboard,
-  textField,
+  textInput,
 } from '@marcellejs/core';
 import { umap } from './components';
 
@@ -18,9 +18,9 @@ import { umap } from './components';
 const input = webcam();
 const featureExtractor = mobileNet();
 
-const label = textField();
+const label = textInput();
 label.title = 'Instance label';
-const capture = button({ text: 'Hold to record instances' });
+const capture = button('Hold to record instances');
 capture.title = 'Capture instances to the training set';
 
 const store = dataStore('localStorage');
@@ -31,7 +31,7 @@ input.$images
   .filter(() => capture.$pressed.value)
   .map(async (x) => ({
     x: await featureExtractor.process(x),
-    y: label.$text.value,
+    y: label.$value.value,
     thumbnail: input.$thumbnails.value,
   }))
   .awaitPromises()
@@ -43,7 +43,7 @@ input.$images
 
 const trainingSetUMap = umap(trainingSet);
 
-const updateUMap = button({ text: 'Update Visualization' });
+const updateUMap = button('Update Visualization');
 updateUMap.$click.subscribe(() => {
   trainingSetUMap.render();
 });

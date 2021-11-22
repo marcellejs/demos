@@ -6,7 +6,7 @@ import {
   dataset,
   dataStore,
   mobileNet,
-  textField,
+  textInput,
   toggle,
   webcam,
   kmeansClustering,
@@ -24,9 +24,9 @@ import {
 const input = webcam();
 const featureExtractor = mobileNet();
 
-const label = textField();
+const label = textInput();
 label.title = 'Instance label';
-const capture = button({ text: 'Hold to record instances' });
+const capture = button('Hold to record instances');
 capture.title = 'Capture instances to the training set';
 
 const store = dataStore('localStorage');
@@ -38,7 +38,7 @@ input.$images
   .map(async (img) => ({
     x: await featureExtractor.process(img),
     thumbnail: input.$thumbnails.value,
-    y: label.$text.value,
+    y: label.$value.value,
   }))
   .awaitPromises()
   .subscribe(trainingSet.create.bind(trainingSet));
@@ -47,7 +47,7 @@ input.$images
 // TRAINING
 // -----------------------------------------------------------
 
-const b = button({ text: 'Train' });
+const b = button('Train');
 b.title = 'Training k-means';
 
 const clusteringKMeans = kmeansClustering({ k: 3, dataStore: store });
@@ -81,7 +81,7 @@ const clusteringScatterPlot = scatterPlot(featureStream, clusteringKMeans.$clust
 // REALTIME CLUSTER PREDICTION
 // -----------------------------------------------------------
 
-const tog = toggle({ text: 'toggle prediction' });
+const tog = toggle('toggle prediction');
 tog.$checked.subscribe((checked) => {
   if (checked && !clusteringKMeans.ready) {
     throwError(new Error('No classifier has been trained'));

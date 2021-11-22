@@ -46,7 +46,7 @@ const cocoPlotResults = confidencePlot(cocoBetterPredictions);
 // -----------------------------------------------------------
 
 const wc = webcam();
-const tog = toggle({ text: 'toggle prediction' });
+const tog = toggle('toggle prediction');
 
 const rtDetectStream = wc.$images
   .filter(() => tog.$checked.value)

@@ -9,7 +9,7 @@ import {
   mobileNet,
   confidencePlot,
   sketchPad,
-  textField,
+  textInput,
   toggle,
   modelParameters,
   trainingProgress,
@@ -29,11 +29,11 @@ classifier.sync('sketch-classifier');
 const batchResults = batchPrediction({ name: 'mlp', dataStore: store });
 
 // Additional widgets and visualizations
-const classLabel = textField();
-const captureButton = button({ text: 'Capture this drawing' });
-const trainButton = button({ text: 'Train the classifier' });
-const batchPredictButton = button({ text: 'Update batch predictions on the training dataset' });
-const realTimePredictToggle = toggle({ text: 'Toggle real-time prediction' });
+const classLabel = textInput();
+const captureButton = button('Capture this drawing');
+const trainButton = button('Train the classifier');
+const batchPredictButton = button('Update batch predictions on the training dataset');
+const realTimePredictToggle = toggle('Toggle real-time prediction');
 
 const trainingSetBrowser = datasetBrowser(trainingSet);
 const classifierParams = modelParameters(classifier);
@@ -46,7 +46,7 @@ const $instances = captureButton.$click
   .sample(input.$images.zip((thumbnail, data) => ({ thumbnail, data }), input.$thumbnails))
   .map(async ({ thumbnail, data }) => ({
     x: await featureExtractor.process(data),
-    y: classLabel.$text.value,
+    y: classLabel.$value.value,
     thumbnail,
   }))
   .awaitPromises();
