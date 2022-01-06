@@ -83,26 +83,26 @@ predictButton.$click.subscribe(async () => {
   );
 });
 
-// // -----------------------------------------------------------
-// // REAL-TIME PREDICTION
-// // -----------------------------------------------------------
+// -----------------------------------------------------------
+// REAL-TIME PREDICTION
+// -----------------------------------------------------------
 
-// const tog = toggle('toggle prediction');
-// tog.$checked.subscribe((checked) => {
-//   if (checked && !classifier.ready) {
-//     throwError(new Error('No classifier has been trained'));
-//     setTimeout(() => {
-//       tog.$checked.set(false);
-//     }, 500);
-//   }
-// });
+const tog = toggle('toggle prediction');
+tog.$checked.subscribe((checked) => {
+  if (checked && !classifier.ready) {
+    throwError(new Error('No classifier has been trained'));
+    setTimeout(() => {
+      tog.$checked.set(false);
+    }, 500);
+  }
+});
 
-// const predictionStream = input.$images
-//   .filter(() => tog.$checked.value && classifier.ready)
-//   .map(async (img) => classifier.predict(await featureExtractor.process(img)))
-//   .awaitPromises();
+const predictionStream = input.$images
+  .filter(() => tog.$checked.value && classifier.ready)
+  .map(async (img) => classifier.predict(await featureExtractor.process(img)))
+  .awaitPromises();
 
-// const plotResults = confidencePlot(predictionStream);
+const plotResults = confidencePlot(predictionStream);
 
 // -----------------------------------------------------------
 // DASHBOARDS
@@ -119,7 +119,7 @@ dash
   .use([label, capture], trainingSetBrowser);
 dash.page('Training').use(params, b, prog, plotTraining);
 dash.page('Batch Prediction').use(predictButton, confMat);
-// dash.page('Real-time Prediction').sidebar(input).use(tog, plotResults);
-// dash.settings.dataStores(store).datasets(trainingSet).models(classifier).predictions(batchMLP);
+dash.page('Real-time Prediction').sidebar(input).use(tog, plotResults);
+dash.settings.dataStores(store).datasets(trainingSet).models(classifier).predictions(batchMLP);
 
 dash.show();
