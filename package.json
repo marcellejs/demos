@@ -1,7 +1,7 @@
 {
   "name": "@marcellejs/demos",
   "private": true,
-  "version": "0.5.0",
+  "version": "0.5.1",
   "workspaces": [
     "mobilenet-tetris",
     "umap"
@@ -15,6 +15,6 @@
     "svelte-select": "^4.4.3"
   },
   "dependencies": {
-    "@marcellejs/core": "^0.5.0"
+    "@marcellejs/core": "^0.5.1"
   }
 }
