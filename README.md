@@ -1,3 +1,7 @@
+# Demos have moved!
+
+Marcelle demos are now part of Marcelle's main monorepo at [marcellejs/marcelle](https://github.com/marcellejs/marcelle/tree/main/apps/demos). This repository is no longer maintained.
+
 # Marcelle Demos
 
 A few demo applications of [Marcelle](https://github.com/marcellejs/marcelle).
